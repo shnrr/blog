@@ -142,6 +142,15 @@ Active Directory 移行ツール (ADMT) 等を使用して、新フォレスト 
 すべての同期ユーザーが同様に値がコピーされていることを確認します。  
   
 ### Step ４： 新 AD フォレストを同期する  
+> [!NOTE]
+> 2026 年 7 月 1 日以降、セキュリティ強化のため、オンプレミス AD から新しいオブジェクトを同期する際に OnPremisesObjectIdentifier 属性の検証が追加されます。<br>
+> 本手順におきましても「Step ４： 新 AD フォレストを同期する」 の前に、Microsoft Entra ID (Azure AD) 側のユーザーに設定されている OnPremisesObjectIdentifier 属性を null に変更する必要があります。<br>
+> 詳細についてはこちらをご確認ください。<br>
+> ■ 一般提供 - ユーザー アカウントの引き継ぎを防ぐための接続セキュリティ強化のMicrosoft Entra<br>
+> https://learn.microsoft.com/ja-jp/entra/fundamentals/whats-new#general-availability---microsoft-entra-connect-security-hardening-to-prevent-user-account-takeover<br>
+> ■ Microsoft Entra Connect のハードマッチの動作変更について<br>
+> https://jpazureid.github.io/blog/azure-active-directory-connect/hardmatch-security-hardening/<br>
+
 新 AD フォレストの AADC を構成して、ハードマッチによる同期元ユーザーの切り替えを行います。  
   
 ① 新 AD フォレストの AADC サーバーで .msi ファイルを起動し、AADC をインストールします。  
