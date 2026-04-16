@@ -127,7 +127,7 @@ toc:
 > [!NOTE]
 > なお、以下のスクリプトでは、条件付きアクセスのターゲットリソースが多い場合の変更に特化した処理を実装しています。
 
-- [Recover split audit logs for Conditional Access policy changes](https://github.com/jpazureid/long-audit-log-recovery/archive/refs/heads/main.zip)
+- [Recover split audit logs for Conditional Access policy changes](https://github.com/jpazureid/long-audit-log-recovery)
 
 ### 免責事項
 
