@@ -14,7 +14,7 @@ list_number: false
 # Apple デバイスでキーチェーンから Secure Enclave 利用へ
 こんにちは、Azure & Identity サポートの金森です。
 
-今回は Apple デバイス (iPhone、iPad、Mac) の [Microsoft Entra ID (以下 Entra ID) へのデバイス登録に紐づく、デバイス ID / キーの情報の保持される仕組み] が変更されたことについて、どのような変更であるかの説明や、この変更による影響、対処方法などについてお知らせします。
+今回は Apple デバイス (iPhone、iPad、Mac) の [Microsoft Entra ID (以下 Entra ID) へのデバイス登録に紐づく、デバイス ID / キーの情報が保持される仕組み] が変更されたことについて、どのような変更であるかの説明や、この変更による影響、対処方法などについてお知らせします。
 
 弊社公開情報では、 [Apple デバイス用の Microsoft Enterprise SSO プラグイン](https://learn.microsoft.com/ja-jp/entra/identity-platform/apple-sso-plugin) 内の [デバイス ID キー ストレージ](https://learn.microsoft.com/ja-jp/entra/identity-platform/apple-sso-plugin#device-identity-key-storage) の説明が該当します。
 
@@ -58,7 +58,7 @@ list_number: false
 
 | SCEP デバイス ID 証明書あり = キーチェーン利用 | 	SCEP デバイス ID 証明書なし = Secure Enclave 利用 |
 |-----|-----|
- ![](./Keychain-to-SecureEnclave-for-Apple-device/3-SCEP-device-Cert-KeyChain.jpg) | ![](./Keychain-to-SecureEnclave-for-Apple-device/4-SCEP-device-Cert-SecureEnclave.jpg) |
+| ![](./Keychain-to-SecureEnclave-for-Apple-device/3-SCEP-device-Cert-KeyChain.jpg) | ![](./Keychain-to-SecureEnclave-for-Apple-device/4-SCEP-device-Cert-SecureEnclave.jpg) |
 
 
 ## この実装変更が展開されるとどのような影響が発生するか
@@ -99,7 +99,7 @@ list_number: false
   - ロールアウトが適用される以前にセットアップしたデバイスでは同様の事象は発生しない。
 
 - 事象が発生した際のクライアント上でのエラー表示例
-以下の例では Safari ブラウザからのアクセス シナリオですが、サインイン時に以下のように 530003 のエラー コードで失敗しています。このエラーコード 530003 は "Your device is required to be managed to access this resource." を意味しており、つまり MDM 管理されたデバイスからのアクセスではないため "デバイスは準拠としてマーク済みである必要がある" のアクセス制御に抵触したことを示しています。
+以下の例では Safari ブラウザからのアクセス シナリオですが、サインイン時に以下のように 530003 のエラー コードで失敗しています。このエラー コード 530003 は "Your device is required to be managed to access this resource." を意味しており、つまり MDM 管理されたデバイスからのアクセスではないため "デバイスは準拠としてマーク済みである必要がある" のアクセス制御に抵触したことを示しています。
 また、"デバイスの識別子" の項目が "使用できません" となっていることもデバイス ID が提示されなかったことを示唆しています。
 
 ![](./Keychain-to-SecureEnclave-for-Apple-device/5-Sample-Sign-ins.jpg)
@@ -113,7 +113,7 @@ list_number: false
 
 ## 対処方法
 Enterprise SSO プラグインを有効化することで、非 MSAL 対応アプリ/ブラウザを利用する際のユーザー認証時にデバイス ID を提示できるようになります。
-Enterprise SSO 機能を有効化するには、 [MVM を使用して iOS/iPadOS Enterprise SSO アプリ拡張機能を構成する](https://learn.microsoft.com/ja-jp/intune/intune-service/configuration/use-enterprise-sso-plug-in-ios-ipados-with-intune?tabs=prereq-intune%2Ccreate-profile-intune) 内の [シングル サインオン アプリ拡張機能構成ポリシーを作成する](https://learn.microsoft.com/ja-jp/intune/intune-service/configuration/use-enterprise-sso-plug-in-ios-ipados-with-intune?tabs=prereq-intune%2Ccreate-profile-intune#create-a-single-sign-on-app-extension-configuration-policy) の手順に沿って Intune にてデバイス構成ポリシーを用いて設定を配布します。
+Enterprise SSO 機能を有効化するには、 [MDM を使用して iOS/iPadOS Enterprise SSO アプリ拡張機能を構成する](https://learn.microsoft.com/ja-jp/intune/intune-service/configuration/use-enterprise-sso-plug-in-ios-ipados-with-intune?tabs=prereq-intune%2Ccreate-profile-intune) 内の [シングル サインオン アプリ拡張機能構成ポリシーを作成する](https://learn.microsoft.com/ja-jp/intune/intune-service/configuration/use-enterprise-sso-plug-in-ios-ipados-with-intune?tabs=prereq-intune%2Ccreate-profile-intune#create-a-single-sign-on-app-extension-configuration-policy) の手順に沿って Intune にてデバイス構成ポリシーを用いて設定を配布します。
  
 Safari ブラウザもしくは [認証ブローカーとして Safari WebView を使用する] 3rd party アプリの場合、以下のように Enterprise SSO を有効化することで、デバイス ID を提示できるようになります。
 [SSO アプリ拡張機能の種類] の設定を "Microsoft Entra ID" にしているのみの設定です。
@@ -135,20 +135,20 @@ A:
 アプリ バンドル ID の正確な情報はアプリのご提供元ベンダー様へご確認ください。
 [iOS デバイスでのアプリ バンドル ID の確認](https://learn.microsoft.com/ja-jp/entra/identity-platform/apple-sso-plugin#find-app-bundle-identifiers-on-ios-devices) にも該当のご案内があります。
 
-その他の簡易的なアプリ バンドル ID の確認方法としては、2026 年 4 月現在では、AppStore のアプリ ID を元に、アプリ バンドル ID を確認することが可能であるという情報を確認しています。
+その他の簡易的なアプリ バンドル ID の確認方法としては、2026 年 4 月現在では、App Store のアプリ ID を元に、アプリ バンドル ID を確認することが可能であるという情報を確認しています。
 その手順は次の通りです。
 
-まずは確認したいアプリの AppStore サイトを開きます。例として MSN アプリとします。
+まずは確認したいアプリの App Store サイトを開きます。例として MSN アプリとします。
 
-AppStore の MSN アプリのサイト
+App Store の MSN アプリのサイト
 https://apps.apple.com/jp/app/msn/id945416273
-->この URL よりアプリ ID が 945416273 であることが分かります。
+->この URL よりアプリ ID が 945416273 であることがわかります。
 
-続けて、Apple の itunes の lookup サイトでアプリ ID の数字 945416273 を id= で指定した URL を開きます。
+続けて、Apple の iTunes の lookup サイトでアプリ ID の数字 945416273 を id= で指定した URL を開きます。
 https://itunes.apple.com/lookup?id=945416273
 
 1.txt というテキストのダウンロードが行われるため、テキストファイルより bundleid 値を検索します。
-今回の例では ["bundleId":"com.microsoft.axp-ios.BingNews"] という値であるため、com.microsoft.axp-ios.BingNews が MSN アプリのアプリ バンドル ID であることが分かります。
+今回の例では ["bundleId":"com.microsoft.axp-ios.BingNews"] という値であるため、com.microsoft.axp-ios.BingNews が MSN アプリのアプリ バンドル ID であることがわかります。
 
 ---
 ### FAQ2
@@ -160,7 +160,7 @@ A:
 OS 上で起動するアプリは、認証に関わるやり取りをアプリ自身のプロセス上で実行せず、別のプロセスに委任する (認証に関する処理を任せる) 作りが広く一般的です。
 これは OS の種類にかかわらず、以下のように言えます。
 
-- Windows の場合、Outlook や Teams 等の Office (1st party) アプリでは WAM (Web Account Manager) と呼ばれる OS の認証ブローカーに認証の処理を任せる
+- Windows の場合、Outlook や Teams などの Office (1st party) アプリでは WAM (Web Account Manager) と呼ばれる OS の認証ブローカーに認証の処理を任せる
 　3rd party アプリの場合、アプリの作りによって WAM に任せる作りのアプリもあれば、Edge WebView に任せる作りのアプリ、自分自身のプロセスで対応する (他プロセスに委任しない) アプリもある
 
 - iOS の場合、Office (1st party) アプリは、Microsoft Authenticator に認証の処理を任せる
@@ -180,7 +180,7 @@ A:
 Apple の OS に対して Enterprise SSO を有効化することで、Safari の認証処理がアドイン/強化される (ブラウザ単位ではなく、デバイスとして保持する認証情報を利用できるようになる) ことになります。
 そのため、Safari もしくは [Safari WebView を認証ブローカーとする作りのアプリ] がその恩恵を受けることになります。
  
-そのため [Safari ブラウザ、もしくは認証ブローカーとして Safari WebView を使用する 3rd party アプリの利用時、これまでは対話的な認証画面が表示されて認証操作を行っていたが、Intune に MDM 登録を行っているユーザーとして SSO が行えるようになり、且つ認証時にデバイス ID 情報も提示できるようになる] という影響/効果が生じることが期待値となります。
+そのため [Safari ブラウザ、もしくは認証ブローカーとして Safari WebView を使用する 3rd party アプリの利用時、これまでは対話的な認証画面が表示されて認証操作を行っていたが、Intune に MDM 登録を行っているユーザーとして SSO が行えるようになり、かつ認証時にデバイス ID 情報も提示できるようになる] という影響/効果が生じることが期待値となります。
 
 なお、前述のとおり MSAL も Safari WebView も認証処理に使用していない 3rd party アプリの場合、該当アプリの [アプリ バンドル ID] を指定することで、同様の影響/効果を得られる可能性もあります。
 繰り返しになりますが該当アプリの実装に依存するため Microsoft として Enterprise SSO の効果が得られるかどうかに関して確証を持ったご案内ができない点、あらかじめご了承ください。
